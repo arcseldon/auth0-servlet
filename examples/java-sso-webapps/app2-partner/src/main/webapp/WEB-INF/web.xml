@@ -46,7 +46,17 @@
         <url-pattern>/callback</url-pattern>
     </servlet-mapping>
 
-    <!-- Error Pages-->
+    <!-- Filters -->
+    <filter>
+        <filter-name>BaseUrlFilter</filter-name>
+        <filter-class>com.auth0.example.BaseUrlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BaseUrlFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Error Pages -->
     <error-page>
         <error-code>404</error-code>
         <location>/portal/home</location>

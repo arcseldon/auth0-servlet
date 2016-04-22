@@ -22,8 +22,6 @@ public class Home extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.debug("Home");
         logger.debug("Request GetServletPath: " + request.getServletPath());
-        final String baseUrl = Helpers.buildUrlStr(request);
-        request.setAttribute("baseUrl", baseUrl);
         final NonceStorage nonceStorage = new RequestNonceStorage(request);
         String nonce = nonceStorage.getState();
         if (nonce == null) {
