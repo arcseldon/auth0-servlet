@@ -15,11 +15,15 @@ public class Helpers {
 
     public static boolean isTrustedExternalReturnUrl(final String externalReturnUrl) {
         logger.debug("Checking externalReturnUrl: " + externalReturnUrl);
+        // TODO - move hard coded trusted URLs to external config
         return "http://localhost:4000/portal/home".equals(externalReturnUrl) ||
                 "http://app2.com:4000/portal/home".equals(externalReturnUrl);
     }
 
     public static Map<String, String> splitQuery(String query) throws UnsupportedEncodingException {
+        if (query == null) {
+            throw new NullPointerException("query cannot be null");
+        }
         Map<String, String> query_pairs = new LinkedHashMap<>();
         String[] pairs = query.split("&");
         for (String pair : pairs) {
@@ -31,6 +35,9 @@ public class Helpers {
     }
 
     public static String buildUrlStr(final HttpServletRequest request) {
+        if (request == null) {
+            throw new NullPointerException("request cannot be null");
+        }
         String scheme      =    request.getScheme();
         String serverName  =    request.getServerName();
         int serverPort     =    request.getServerPort();

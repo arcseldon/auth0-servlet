@@ -35,7 +35,6 @@ public class PartnerLogin extends HttpServlet {
             response.flushBuffer();
             return;
         }
-        // set this up for view page
         logger.debug("Login");
         logger.debug("Request GetServletPath: " + request.getServletPath());
         final NonceStorage nonceStorage = new RequestNonceStorage(request);
@@ -45,11 +44,10 @@ public class PartnerLogin extends HttpServlet {
             nonceStorage.setState(nonce);
         }
         request.setAttribute("state", "nonce=" + nonce + "&eru=" + externalReturnUrl);
-        request.setAttribute("eru", externalReturnUrl);
+        logger.debug("Nonce: " + nonce);
+        logger.debug("Eru: " + externalReturnUrl);
         // response header state only for POSTMAN - not required in real app
         response.setHeader("state", "nonce=" + nonce + "&eru=" + externalReturnUrl);
-        logger.debug("Nonce (set in state): " + nonce);
-        logger.debug("Eru (set in state): " + externalReturnUrl);
         request.getRequestDispatcher("/partnerLogin.jsp").forward(request, response);
 
     }

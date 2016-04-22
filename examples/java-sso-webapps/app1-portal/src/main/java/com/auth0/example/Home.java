@@ -19,7 +19,6 @@ public class Home extends HttpServlet {
         logger.debug("Home");
         String baseUrl = Helpers.buildUrlStr(request);
         request.setAttribute("baseUrl", baseUrl);
-        // check if logged in..
         final Auth0User user = Auth0User.get(request);
         request.setAttribute("isAuthenticated", (user != null) ? true : false);
         if (user != null) {
