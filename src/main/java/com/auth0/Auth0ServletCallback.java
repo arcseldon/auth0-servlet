@@ -184,7 +184,7 @@ public class Auth0ServletCallback extends HttpServlet {
         return req.getParameter("error") != null;
     }
 
-    static String readParameter(String parameter, ServletConfig config) {
+    protected static String readParameter(String parameter, ServletConfig config) {
         String first = config.getInitParameter(parameter);
         if (hasValue(first)) {
             return first;

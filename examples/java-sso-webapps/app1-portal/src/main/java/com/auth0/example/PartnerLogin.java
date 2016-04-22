@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class PartnerLogin extends HttpServlet {
@@ -19,10 +21,18 @@ public class PartnerLogin extends HttpServlet {
 
     private final NonceGenerator nonceGenerator = new NonceGenerator();
 
+    protected List trustedExternalReturnUrls;
+
+    protected boolean isTrustedExternalReturnUrl (final String url) {
+        if (trustedExternalReturnUrls == null) {
+            final String trustedExternalReturnUrlsStr = getServletContext().getInitParameter("auth0.trustedExternalReturnUrls");
+            trustedExternalReturnUrls = Arrays.asList(trustedExternalReturnUrlsStr.split("\\s*,\\s*"));
+        }
+        return trustedExternalReturnUrls.contains(url);
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.debug("PartnerLogin");
-        final String baseUrl = Helpers.buildUrlStr(request);
-        request.setAttribute("baseUrl", baseUrl);
         final String externalReturnUrl = request.getParameter("externalReturnUrl");
         if (externalReturnUrl == null) {
             response.getWriter().write("Missing required external return URL query param.");
@@ -30,7 +40,7 @@ public class PartnerLogin extends HttpServlet {
             response.flushBuffer();
             return;
         }
-        if (!Helpers.isTrustedExternalReturnUrl(externalReturnUrl)) {
+        if (!isTrustedExternalReturnUrl(externalReturnUrl)) {
             response.getWriter().write("Cannot redirect to untrusted URL: " + externalReturnUrl);
             response.setStatus(400);
             response.flushBuffer();

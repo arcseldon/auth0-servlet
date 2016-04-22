@@ -76,6 +76,14 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/portal/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>BaseUrlFilter</filter-name>
+        <filter-class>com.auth0.example.BaseUrlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BaseUrlFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!-- Error Pages-->
     <error-page>
@@ -102,6 +110,11 @@
     <context-param>
         <param-name>auth0.connection</param-name>
         <param-value>MyMongoDB</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>auth0.trustedExternalReturnUrls</param-name>
+        <param-value>http://localhost:4000/portal/home,http://app2.com:4000/portal/home</param-value>
     </context-param>
 
     <context-param>
