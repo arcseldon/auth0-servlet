@@ -51,7 +51,7 @@ public class Auth0CallbackHandler extends Auth0ServletCallback {
     protected void onFailure(HttpServletRequest req, HttpServletResponse resp, Exception ex) throws ServletException, IOException {
         ex.printStackTrace();
         final boolean hasQueryParams = req.getQueryString() != null;
-        String externalReturnUrl = (String) req.getAttribute("externalReturnUrl");
+        final String externalReturnUrl = (String) req.getAttribute("externalReturnUrl");
         if (externalReturnUrl != null) {
             //TODO - improve error reporting
             final String errorQueryParam = "error_description=Callback_Failure";
@@ -71,19 +71,19 @@ public class Auth0CallbackHandler extends Auth0ServletCallback {
     @Override
     protected boolean isValidState(HttpServletRequest req) {
         final String stateValue = req.getParameter("state");
-        Map<String, String> pairs;
         try {
-            pairs = Helpers.splitQuery(stateValue);
+            final Map<String, String> pairs = Helpers.splitQuery(stateValue);
+            final String externalReturnUrl = pairs.get("eru");
+            final String state = pairs.get("nonce");
+            if (externalReturnUrl != null) {
+                req.setAttribute("externalReturnUrl", externalReturnUrl);
+            }
+            final boolean trusted = externalReturnUrl == null || Helpers.isTrustedExternalReturnUrl(externalReturnUrl);
+            return state != null && state.equals(getNonceStorage(req).getState()) && trusted;
         } catch (UnsupportedEncodingException e) {
             return false;
         }
-        final String externalReturnUrl = pairs.get("eru");
-        if (externalReturnUrl != null) {
-            req.setAttribute("externalReturnUrl", externalReturnUrl);
-        }
-        final boolean trusted = externalReturnUrl == null || Helpers.isTrustedExternalReturnUrl(externalReturnUrl);
-        final String state = pairs.get("nonce");
-        return state != null && state.equals(getNonceStorage(req).getState()) && trusted;
     }
+
 
 }

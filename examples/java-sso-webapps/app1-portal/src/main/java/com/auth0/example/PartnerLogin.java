@@ -20,7 +20,8 @@ public class PartnerLogin extends HttpServlet {
     private final NonceGenerator nonceGenerator = new NonceGenerator();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String baseUrl = Helpers.buildUrlStr(request);
+        logger.debug("PartnerLogin");
+        final String baseUrl = Helpers.buildUrlStr(request);
         request.setAttribute("baseUrl", baseUrl);
         final String externalReturnUrl = request.getParameter("externalReturnUrl");
         if (externalReturnUrl == null) {
@@ -35,7 +36,6 @@ public class PartnerLogin extends HttpServlet {
             response.flushBuffer();
             return;
         }
-        logger.debug("Login");
         logger.debug("Request GetServletPath: " + request.getServletPath());
         final NonceStorage nonceStorage = new RequestNonceStorage(request);
         String nonce = nonceStorage.getState();
