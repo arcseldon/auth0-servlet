@@ -21,7 +21,7 @@
     </servlet>
     <servlet>
         <servlet-name>RedirectCallback</servlet-name>
-        <servlet-class>com.auth0.example.Auth0CallbackHandler</servlet-class>
+        <servlet-class>com.auth0.Auth0ServletCallback</servlet-class>
         <init-param>
             <param-name>auth0.redirect_on_success</param-name>
             <param-value>/portal/home</param-value>
